@@ -1,6 +1,6 @@
 {
   "name": "esbuild-copy-files",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "repository": "https://github.com/tiavina-mika/esbuild-copy-files.git",
   "author": "tiavina-mika <tiavinamika@gmail.com>",
   "types": "./dist/index.d.ts",
