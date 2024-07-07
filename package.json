@@ -1,8 +1,29 @@
 {
   "name": "esbuild-copy-files",
   "version": "0.0.0",
+  "description": "Copy static files with esbuild",
+  "keywords": [
+    "esbuild",
+    "copy-files",
+    "plugin",
+    "typescript",
+    "esbuild-typescript-plugin",
+    "npm-package",
+    "esbuild-plugin"
+  ],
+  "homepage": "https://github.com/tiavina-mika/esbuild-copy-files",
+  "bugs": {
+    "url": "https://github.com/tiavina-mika/esbuild-copy-files/issues"
+  },
+  "author": {
+    "name": "Tiavina Michael Ralainirina",
+    "email": "tiavinamika@gmail.com",
+    "github": "https://github.com/tiavina-mika"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/tiavina-mika/esbuild-copy-files.git",
-  "author": "tiavina-mika <tiavinamika@gmail.com>",
   "types": "./dist/index.d.ts",
   "main": "dist/index.js",
   "exports": {
