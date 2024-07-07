@@ -1,6 +1,7 @@
 const esbuild = require('esbuild');
 const path = require('path');
 const fs = require('fs-extra');
+const { nodeExternalsPlugin } = require("esbuild-node-externals");
 
 const esbuildCopyTypesPlugin = () => ({
   name: 'esbuild-copy-plugin',
@@ -24,10 +25,10 @@ const buildOptions = {
   ],
   // see: https://stackoverflow.com/questions/71837664/does-esbuild-provide-a-feature-like-the-resolve-alias-option-in-webpack
   bundle: true,
-  minify: true,
   platform: 'node',
   outdir: 'dist',
   plugins: [
+    nodeExternalsPlugin(),
     esbuildCopyTypesPlugin()
   ],
 };
