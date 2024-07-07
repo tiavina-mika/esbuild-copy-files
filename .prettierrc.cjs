@@ -1,0 +1,50 @@
+/**
+ * Remember to restart VSCode after making
+ * any changes here and saving this file.
+ */
+module.exports = {
+  arrowParens: 'always',
+  quoteProps: 'preserve',
+  bracketSameLine: false,
+  endOfLine: "lf",
+  importOrder: [
+    "^express$",
+    '',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^@/config/(.*)$',
+    '',
+    '^@/cloud/functions(.*)$',
+    '^@/cloud/services(.*)$',
+    '^@/cloud/triggers(.*)$',
+    '^@/cloud/utils(.*)$',
+    '',
+    '^@/controllers/(.*)$',
+    '^@/routes/(.*)$',
+    '^@/services/(.*)$',
+    '^@/utils/(.*)$',
+    '^@/validations/(.*)$',
+    '',
+    '^@/types/(.*)$',
+    '',
+    '^[./]',
+    '',
+  ],
+  importOrderParserPlugins: ['typescript', 'decorators-legacy'],
+  plugins: [
+    '@ianvs/prettier-plugin-sort-imports',
+  ],
+  printWidth: 80,
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'all',
+  useTabs: false,
+  importOrderSeparation: true,
+  importOrderCaseInsensitive: true,
+  importOrderGroupNamespaceSpecifiers: true,
+  importOrderParserPlugins : ["flow", "[\"decorators\", { \"decoratorsBeforeExport\": true }]"],
+  importOrderMergeDuplicateImports: true,
+  importOrderCombineTypeAndValueImports: true,
+  decoratorsBeforeExport: true
+};
