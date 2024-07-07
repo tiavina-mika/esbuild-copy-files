@@ -3,12 +3,25 @@
   "version": "0.0.0",
   "repository": "https://github.com/tiavina-mika/esbuild-copy-files.git",
   "author": "tiavina-mika <tiavinamika@gmail.com>",
+  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
   "scripts": {
-    "start": "node --enable-source-maps dist/index.js",
-    "dev": "npx concurrently \"node config/esbuild/build.watch.config.js\" \"npx nodemon\"",
+    "start": "node index.ts",
+    "watch:server": "node ./build.watch.config.js",
+    "watch:restart-server": "nodemon --config nodemon.json",
+    "dev": "npx concurrently \"yarn watch:server\" \"yarn watch:restart-server\"",
     "lint:check": "eslint",
     "lint": "eslint src --ext ts --fix",
-    "build": "node config/esbuild/build.config.js"
+    "build": "node ./build.config.js"
   },
   "dependencies": {
     "anymatch": "^3.1.3",
@@ -17,12 +30,15 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
-    "esbuild": "^0.20.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@types/async": "^3.2.24",
+    "@types/fs-extra": "^11.0.4",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.20.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.20.0",
+    "esbuild-plugin-d.ts": "^1.2.3",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -33,6 +49,8 @@
     "eslint-plugin-prefer-arrow-functions": "^3.2.4",
     "eslint-plugin-prettier": "^5.1.3",
     "fs-extra": "^11.1.1",
+    "nodemon": "^3.1.4",
+    "npm-dts": "^1.3.12",
     "prettier": "^3.2.2",
     "typescript": "^5.3.3"
   },

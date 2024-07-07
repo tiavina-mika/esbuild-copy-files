@@ -17,10 +17,11 @@
     "noEmit": true,
     /* If your code doesn't run in the DOM: */
     "lib": ["es2022"],
+    "outDir": "./dist",
     "paths": {
       "@/*": ["./src/*"]
     },
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/dist", "config/esbuild/*", "config/**/*.js", "client"]
+  "exclude": ["node_modules", "src/dist", "*.config.js", "dev/**/*.js"]
 }

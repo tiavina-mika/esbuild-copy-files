@@ -1,5 +1,7 @@
 {
-  "watch": ["dist"],
-  "ext": "js,ts,json",
-  "exec": "yarn start:dev"
+  "watch": ["src"],
+	"ignore": ["src/**/*.test.ts", "dist/", "node_modules/"],
+	"ext": "ts,mjs,js,json",
+	"exec": "node ./dist/index.js",
+	"legacyWatch": true
 }
