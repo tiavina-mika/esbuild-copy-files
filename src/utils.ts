@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs-extra';
-import crypto from "crypto";
 import anymatch from 'anymatch';
 import { ArrayLike } from './types';
 
@@ -10,8 +9,6 @@ type CopyActionsInput = {
   source: string;
 };
 
-
-const uuid = crypto.randomBytes(16).toString("hex");
 
 export const ensureArray = <T>(val: ArrayLike<T>): any[] => Array.isArray(val) ? val : [val];
 
@@ -35,19 +32,15 @@ export const copyFiles = async ({ to = [], ignoreFiles = [], source }: CopyActio
     const destPath = path.resolve(currentRoot, dest);
     await fs.ensureDir(destPath);
     const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
-    const tempDest = destPath + uuid;
 
-    await fs.ensureDir(tempDest);
-    await fs.copy(sourcePath, tempDest);
+    await forceCopy(sourcePath, destPath);
 
     for (const entry of dirEntries) {
       const match = anymatch(ensureArray(ignoreFiles), entry.name)
       if (entry.isFile() && match) {
-        await fs.remove(tempDest + '/' + entry.name);
+        await fs.remove(destPath + '/' + entry.name);
       }
     }
-    await forceCopy(tempDest, destPath);
-    await fs.remove(tempDest);
   }
 }
 
