@@ -10,7 +10,7 @@ const esbuildCopyTypesPlugin = () => ({
         try {
           const currentRoot = process.cwd();
           const typesPath = path.resolve(currentRoot, './src/types.d.ts');
-          const destPath = path.resolve(currentRoot, './dist/index.d.ts');
+          const destPath = path.resolve(currentRoot, './dist/types.d.ts');
           await fs.copy(typesPath, destPath);
         } catch (e) {
             console.error('Failed to copy file:', e);

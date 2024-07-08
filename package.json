@@ -24,11 +24,11 @@
     "access": "public"
   },
   "repository": "https://github.com/tiavina-mika/esbuild-copy-files.git",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types.d.ts",
   "main": "dist/index.js",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types.d.ts",
       "require": "./dist/index.js"
     }
   },

@@ -23,5 +23,5 @@
     },
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/dist", "*.config.js", "dev/**/*.js"]
+  "exclude": ["node_modules", "src/dist", "build.config.js", "dev/**/*.js"]
 }
