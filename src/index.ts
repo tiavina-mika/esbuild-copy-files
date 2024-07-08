@@ -4,4 +4,4 @@ export {
   type Options
 } from './types.d';
 
-export default copy;
+export { copy };
