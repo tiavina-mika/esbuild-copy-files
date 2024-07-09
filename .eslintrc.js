@@ -7,15 +7,9 @@ module.exports = {
     'plugin:eslint-comments/recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['dist', 'node_modules/', '.eslintrc.js', 'boBuild'],
+  ignorePatterns: ['dist', 'node_modules/', '.eslintrc.js'],
   parser: '@typescript-eslint/parser',
   plugins: ['prefer-arrow-functions'],
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "tsconfigRootDir": __dirname,
-    "project": "./tsconfig.json"
-  },
   rules: {
     'prettier/prettier': ['off', { singleQuote: true }],
     "import/no-extraneous-dependencies": "off",
@@ -36,7 +30,6 @@ module.exports = {
     'max-len': 'off',
     "consistent-return": "off",
     "no-restricted-syntax" : "off",
-    "react/jsx-filename-extension": "off",
     "class-methods-use-this": "off",
     // -- see: https://github.com/prettier/eslint-plugin-prettier -- //
     "arrow-body-style": "off",
@@ -53,10 +46,11 @@ module.exports = {
         'singleReturnOnly': false,
       },
     ],
-  },
-  "settings": {
-    "react": {
-      "version": '999.999.999'
-    }
+    // ------------ jest ------------ //
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   }
 }

@@ -46,36 +46,36 @@ jobs:
   #       run: yarn lint
 
   # see: https://qa-nora.medium.com/unit-testing-with-jest-and-integration-with-github-actions-bc241b31d257
-  # test:
-  #   name: Test
-  #   # need the previous job to be completed
-  #   # needs: lint
-  #   runs-on: ubuntu-latest
+  test:
+    name: Test
+    # need the previous job to be completed
+    # needs: lint
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     # need this for using yarn v4
-  #     - name: Enable Corepack
-  #       run: corepack enable
+      # need this for using yarn v4
+      - name: Enable Corepack
+        run: corepack enable
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-  #     - name: Install dependencies
-  #       run: yarn
+      - name: Install dependencies
+        run: yarn
 
-  #     - name: Test
-  #       run: yarn test:coverage
+      - name: Test
+        run: yarn test:coverage
 
   changelog:
     name: Changelog
-    # needs:
-    #   # - lint
-    #   - test
+    needs:
+      # - lint
+      - test
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
