@@ -51,8 +51,10 @@ export const copyFiles = async ({ to = [], ignoreFiles = [], source }: CopyActio
     // remove files that match the ignoreFiles pattern in the destination directory
     for (const entry of dirEntries) {
       const match = anymatch(ensureArray(ignoreFiles), entry.name)
-      if (entry.isFile() && match) {
-        await fs.remove(destPath + '/' + entry.name);
+      if (match) {
+        if (entry.isDirectory() || entry.isFile()) {
+          await fs.remove(destPath + '/' + entry.name);
+        }
       }
     }
   }

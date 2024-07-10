@@ -81,6 +81,18 @@ copy({
   ]
 })
 ```
+```tsx
+copy({
+  assets: [
+    {
+      from: ['./src/folder1'],
+      to: ['./dist/folder1'],
+      // copy only one subfolder
+      ignoreFiles: ['subfolder1']
+    }
+  ]
+})
+```
 
 ### Watch
 <p>Watch files in the source directory for changes or when a new files are created</p>
@@ -96,7 +108,6 @@ copy({
   ]
 })
 ```
-
 
 ### Multiple copy
 ```tsx

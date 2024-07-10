@@ -107,6 +107,24 @@ describe('esbuild-copy-files', () => {
       const files = fs.readdirSync(path.join(destDir, '/folder1/subfolder1'));
       expect(files).toEqual(['test2.json']);
     });
+
+    test('should ignore one folder', async () => {
+      await builder(
+        {
+          assets: [
+            {
+              from: [`${sourceDir}/folder3`],
+              to: [`${destDir}/folder3`],
+              ignoreFiles: ['subfolder3'],
+            }
+          ]
+        },
+      );
+  
+      const files = fs.readdirSync(path.join(destDir, '/folder3'));
+      expect(files).toEqual(['test7.txt']);
+      expect(files.length).toEqual(1);
+    });
   
     test('should ignore files with a same extension', async () => {
       await builder(
