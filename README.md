@@ -1,15 +1,11 @@
 # esbuild-copy-files
 
 <p align="left">
-An <a href="https://mui.com/material-ui/getting-started/overview/">esbuild</a> plugin to copy static files
- and folders from a source directory to destination directory</p>
+An <a href="https://mui.com/material-ui/getting-started/overview/">esbuild</a> plugin to copy static files and folders from a source directory to destination directory</p>
 
 <p>✔ Easy to use</p>
 <p>✔ Lightweight</p>
 <p>✔ Typed</p>
-## Demo
-
-- **[CodeSandbox demo](https://codesandbox.io/s/github/tiavina-mika/esbuild-copy-files-demo)**
 
 <br />
 
@@ -56,16 +52,18 @@ esbuild.build({
 # the structure of the source files
 src/
 ├── folder1/
+│   ├── file1.png
 │   ├── subfolder1/
-│   │   └── file1.json
-│   │   └── file2.txt
+│   │   └── file2.json
+│   │   └── file3.txt
 
 # the structure of the destination files
 dist/
 ├── folder1/
+│   ├── file1.png
 │   ├── subfolder1/
-│   │   └── file1.json
-│   │   └── file2.txt
+│   │   └── file2.json
+│   │   └── file3.txt
 
 ```
 
@@ -84,20 +82,9 @@ copy({
 })
 ```
 
-```sh
-# the structure of the source files
-src/
-├── folder1/
-│   ├── file2.txt
-
-# the structure of the destination files
-dist/
-├── folder1/
-│   ├── file2.txt
-
-```
-
 ### Watch
+<p>Watch files in the source directory for changes or when a new files are created</p>
+
 ```tsx
 copy({
   assets: [
@@ -109,23 +96,22 @@ copy({
   ]
 })
 ```
-<p>This will watch files in the source directory for changes or when a new files 
-or when new files are created</p>
+
 
 ### Multiple copy
 ```tsx
-  copy({
-    assets: [
-      {
-        from: ['./src/folder1'],
-        to: ['./dist/folder3']
-      },
-      {
-        from: ['./src/folder2'],
-        to: ['./dist/folder4']
-      }
-    ]
-  })
+copy({
+  assets: [
+    {
+      from: ['./src/folder1'],
+      to: ['./dist/folder3']
+    },
+    {
+      from: ['./src/folder2'],
+      to: ['./dist/folder4']
+    }
+  ]
+})
 ```
 
 ```sh
