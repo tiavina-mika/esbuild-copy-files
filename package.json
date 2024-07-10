@@ -1,6 +1,6 @@
 {
   "name": "esbuild-copy-files",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "esbuild plugin to copy static files",
   "keywords": [
     "esbuild",
