@@ -164,12 +164,35 @@ describe('esbuild-copy-files', () => {
       expect(files).toEqual(['test1.json', 'test2.json', 'test3.json', 'test4.txt', 'test5.txt']);
     });
   
-    // test('check two passed check', () => {
-    //   const { allChecksPassed, validationMessages } = validatePasswordChecklist('abcde8')
-    //   expect(allChecksPassed).toBe(false);
-    //   const passedChecks = validationMessages.filter((error) => error.key && ['lowerCase', 'number'].includes(error.key));
-    //   expect(passedChecks?.length).toBe(2);
-    // });
+    test('should copy files and folders', async () => {
+      await builder(
+        {
+          assets: [
+            {
+              from: [`${sourceDir}/folder3`],
+              to: [`${destDir}/folder3`],
+            }
+          ]
+        },
+      );
+  
+      const files: string[] = [];
+      const dirs: string[] = [];
+      const dirEntries = await fs.readdir(`${sourceDir}/folder3`, { withFileTypes: true });
+      for (const entry of dirEntries) {
+        if (entry.isFile()) {
+          files.push(entry.name);
+        } else {
+          dirs.push(entry.name);
+        }
+      }
+
+      expect(files).toEqual(['test7.txt']);
+      expect(dirs).toEqual(['subfolder3']);
+      // check if the subfolder3 and its files are copied
+      const subFiles1 = fs.readdirSync(path.join(destDir, '/folder3/subfolder3'));
+      expect(subFiles1).toEqual(['test6.json']);
+    });
   });
   
   describe('copy files on change', () => {
