@@ -78,7 +78,7 @@ describe('esbuild-copy-files', () => {
     test('should copy all files in directories', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder1/subfolder1`],
               to: [`${destDir}/folder1/subfolder1`],
@@ -91,62 +91,63 @@ describe('esbuild-copy-files', () => {
       expect(files).toEqual(['test1.json', 'test2.json']);
     });
   
-    test('should ignore one file to copy', async () => {
+    test('should copy one file', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder1/subfolder1`],
               to: [`${destDir}/folder1/subfolder1`],
-              ignoreFiles: ['test1.json'],
+              filter: ['test1.json'],
             }
           ]
         },
       );
   
       const files = fs.readdirSync(path.join(destDir, '/folder1/subfolder1'));
-      expect(files).toEqual(['test2.json']);
+      expect(files).toEqual(['test1.json']);
+      expect(files.includes('test2.json')).toBe(false);
     });
 
-    test('should ignore one folder', async () => {
+    test('should copy one folder', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder3`],
               to: [`${destDir}/folder3`],
-              ignoreFiles: ['subfolder3'],
+              filter: ['subfolder3'],
             }
           ]
         },
       );
   
       const files = fs.readdirSync(path.join(destDir, '/folder3'));
-      expect(files).toEqual(['test7.txt']);
-      expect(files.length).toEqual(1);
+      expect(files).toEqual(['subfolder3']);
+      expect(files.includes('test7.txt')).toBe(false);
     });
   
-    test('should ignore files with a same extension', async () => {
+    test('should copy files with a same extension', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder2`],
               to: [`${destDir}/folder2`],
-              ignoreFiles: ['*.txt'], // ignore all txt files
+              filter: ['*.txt'], // filter all txt files
             }
           ]
         },
       );
   
       const files = fs.readdirSync(path.join(destDir, '/folder2'));
-      expect(files).toEqual(['test3.json']);
+      expect(files).toEqual(['test4.txt', 'test5.txt']);
     });
   
     test('should copy all files to destination folders respectively', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder1/subfolder1`],
               to: [`${destDir}/folder1/subfolder1`],
@@ -169,7 +170,7 @@ describe('esbuild-copy-files', () => {
     test('should copy files to a new directory', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder1/subfolder1`, `${sourceDir}/folder2`],
               to: [`${destDir}/folder3/subfolder3`],
@@ -185,7 +186,7 @@ describe('esbuild-copy-files', () => {
     test('should copy files and folders', async () => {
       await builder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder3`],
               to: [`${destDir}/folder3`],
@@ -217,7 +218,7 @@ describe('esbuild-copy-files', () => {
     test('should copy new created file', async () => {
       context = await watchedBuilder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder1/subfolder1`],
               to: [`${destDir}/folder1/subfolder1`],
@@ -225,6 +226,7 @@ describe('esbuild-copy-files', () => {
             }
           ],
           stopWatching: true,
+          watch: true,
         },
       );
 
@@ -248,7 +250,7 @@ describe('esbuild-copy-files', () => {
     test('should updated copied file when source change', async () => {
       context = await watchedBuilder(
         {
-          assets: [
+          patterns: [
             {
               from: [`${sourceDir}/folder1/subfolder1`],
               to: [`${destDir}/folder1/subfolder1`],
@@ -256,6 +258,7 @@ describe('esbuild-copy-files', () => {
             }
           ],
           stopWatching: true,
+          watch: true,
         },
       );
 

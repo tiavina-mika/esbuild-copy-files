@@ -5,7 +5,7 @@ import { ArrayLike } from './types';
 
 type CopyActionsInput = {
   to: ArrayLike<string>;
-  ignoreFiles: ArrayLike<string>;
+  filter: ArrayLike<string>;
   source: string;
 };
 
@@ -27,11 +27,17 @@ const forceCopy = async (sourcePath: string, destPath: string) => {
 };
 
 /**
- * copy files from source to destination
- * @param param0 
+ * 
+ * copy files from the source directory to the destination directory
+ * list of destination directories
+ * @param to
+ * the source directory or file to copy from
+ * @param source
+ * the source directories or files to copy
+ * @param filter 
  * @returns 
  */
-export const copyFiles = async ({ to = [], ignoreFiles = [], source }: CopyActionsInput) => {
+export const copyFiles = async ({ to = [], filter = [], source }: CopyActionsInput): Promise<void | undefined> => {
   if (!source) return;
 
   // get the current working directory
@@ -48,10 +54,13 @@ export const copyFiles = async ({ to = [], ignoreFiles = [], source }: CopyActio
     // list all files in the source directory
     const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
 
-    // remove files that match the ignoreFiles pattern in the destination directory
+    // if no filter is provided, copy all files
+    if (!ensureArray(filter).length) return;
+
+    // remove files that does not match the filter pattern in the destination directory
     for (const entry of dirEntries) {
-      const match = anymatch(ensureArray(ignoreFiles), entry.name)
-      if (match) {
+      const match = anymatch(ensureArray(filter), entry.name)
+      if (!match) {
         if (entry.isDirectory() || entry.isFile()) {
           await fs.remove(destPath + '/' + entry.name);
         }
@@ -60,14 +69,33 @@ export const copyFiles = async ({ to = [], ignoreFiles = [], source }: CopyActio
   }
 }
 
-export const copyFilesOnChange = ({ to = [], source, ignoreFiles }: CopyActionsInput) => async (watchedFilePath: string) => {
+/**
+ * 
+ * copy files from the source directory to the destination directory on change
+ * 
+ * list of destination directories
+ * @param to
+ * the source directory or file to copy from
+ * @param source
+ * the source directories or files to copy
+ * @param filter 
+ * @returns 
+ */
+export const copyFilesOnChange = ({ to = [], source, filter }: CopyActionsInput) => async (watchedFilePath: string): Promise<void | undefined> => {
   try {
     const fileName = path.basename(watchedFilePath);
-    const ignoreMatch = anymatch(ensureArray(ignoreFiles), fileName);
-    if (!ignoreMatch) {
-      await copyFiles({ to, source, ignoreFiles });
+
+    // if no filter is provided, copy all files
+    if (!ensureArray(filter).length) {
+      await copyFiles({ to, source, filter });
+      return;
+    };
+
+    // copy the file if it matches the filter pattern
+    const filterMatch = anymatch(ensureArray(filter), fileName);
+    if (filterMatch) {
+      await copyFiles({ to, source, filter });
     }
-  
   } catch (e) {
     console.error('copyFilesOnChange to copy file error:', e);
   }

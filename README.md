@@ -3,9 +3,9 @@
 <p align="left">
 An <a href="https://mui.com/material-ui/getting-started/overview/">esbuild</a> plugin to copy static files and folders from a source directory to destination directory</p>
 
-<p>✔ Easy to use</p>
-<p>✔ Lightweight</p>
-<p>✔ Typed</p>
+<p>✔️ Easy to use</p>
+<p>✔️ Lightweight</p>
+<p>✔️ Typed</p>
 
 <br />
 
@@ -37,7 +37,7 @@ esbuild.build({
   outfile: "dist/index.js",
   plugins: [
     copy({
-      assets: [
+      patterns: [
         {
           from: ['./src/folder1/subfolder1'],
           to: ['./dist/folder1/subfolder1'],
@@ -68,27 +68,27 @@ dist/
 ```
 
 
-### Ignore files
+### Filter files to copy
 ```tsx
 copy({
-  assets: [
+  patterns: [
     {
       from: ['./src/folder1'],
       to: ['./dist/folder1'],
-      // copy files other than json
-      ignoreFiles: ['*.json']
+      // copy files with json and js extension
+      filter: ['*.json', '.*js']
     }
   ]
 })
 ```
 ```tsx
 copy({
-  assets: [
+  patterns: [
     {
       from: ['./src/folder1'],
       to: ['./dist/folder1'],
-      // copy only one subfolder
-      ignoreFiles: ['subfolder1']
+      // copy only one folder
+      filter: ['subfolder1']
     }
   ]
 })
@@ -96,14 +96,24 @@ copy({
 
 ### Watch
 <p>Watch files in the source directory for changes or when a new files are created</p>
+<p>Watch files in the source directory for changes or when a new files are created</p>
 
 ```tsx
 copy({
-  assets: [
+  // When setting to true, make sure using esbuild's watch mode (ctx.watch())
+  watch: true,
+  patterns: [
     {
-      from: ['./src/folder1'],
+      from: ['./src/folder1', './src/folder2'],
       to: ['./dist/folder1'],
+      // watch change on src/folder1 and src/folder2
       watch: true
+    },
+    {
+      from: ['./src/folder3'],
+      to: ['./dist/folder3'],
+      // do not watch change on ./src/folder3
+      watch: false
     }
   ]
 })
@@ -112,7 +122,7 @@ copy({
 ### Multiple copy
 ```tsx
 copy({
-  assets: [
+  patterns: [
     {
       from: ['./src/folder1'],
       to: ['./dist/folder3']
@@ -148,7 +158,7 @@ See [`here`](https://github.com/tiavina-mika/esbuild-copy-files-demo/tree/main/e
 ```tsx
 export type ArrayLike<T = string> = T | T[];
 
-export type Asset = {
+export type Pattern = {
   /**
    * The source directory to copy files from
    * it can be a string or an array of strings
@@ -164,12 +174,12 @@ export type Asset = {
    */
   to?: ArrayLike;
   /**
-   * The files to ignore when copying files
+   * Filter files or directory to copy
    * it can be a string or an array of strings
    * it should be the name of the file or a pattern to match the file name from the source directory
-   * example: `['test1.json', '*.txt']`
+   * example: `['package.json', '*.txt', 'myFolder']`
    */
-  ignoreFiles?: ArrayLike;
+  filter?: ArrayLike;
   /**
    * Watch for changes in the source directory
    * when a file is added or changed, copy or change the file to the destination directory
@@ -182,12 +192,18 @@ export type Options = {
   /**
    * The list of assets to copy
    */
-  assets: Asset[];
+  patterns: Pattern[];
   /**
-   * Stop watching for changes in the source directory
+   * Manually top watching for changes in the source directory
    * @default false
    */
   stopWatching?: boolean;
+  /**
+   * Watch for changes in the source directory
+   * When setting to true, make sure using esbuild's watch mode (ctx.watch())
+   * @default false
+   */
+  watch?: boolean;
 };
 
 ```
