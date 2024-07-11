@@ -33,7 +33,7 @@ const copy = ({ patterns = [], stopWatching = false, watch = false }: Options) =
               const { from = [], to = [], filter = ['*'], watch: patternWatch } = pattern;
               const fromArr = ensureArray(from);
               const newAddFiles = await getNewAddedFiles(originalSources, fromArr);
-              console.log("🚀 ~ build.onEnd ~ newAddFiles:", newAddFiles)
+              console.log("🚀 ~ build.onEnd ~ newAddFiles:", { newAddFiles, originalSources, fromArr })
 
               for (const source of fromArr) {
                 const filterWithNewAddedFiles = [...filter, ...newAddFiles];

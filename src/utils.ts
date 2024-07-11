@@ -42,6 +42,7 @@ export const getNewAddedFiles = async (originalSource: string[], currentSource: 
     // list all files in the source directory
     const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
     for (const dest of dirEntries) {
+      console.log("🚀 ~ getNewAddedFiles ~ dest:", dest.name, !originalSource.includes(dest.name))
       // if the file is not in the original source directory, add it to the new files list
       if (!originalSource.includes(dest.name)) {
         newFiles.push(dest.name);
