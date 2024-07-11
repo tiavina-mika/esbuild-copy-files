@@ -3,6 +3,9 @@
 <p align="left">
 An <a href="https://esbuild.github.io/">esbuild</a> plugin to copy static files and folders from a source directory to destination directory</p>
 
+<!-- [START BADGES] -->
+<!-- [END BADGES] -->
+
 ✔️ Easy to use </br>
 ✔️ Lightweight </br>
 ✔️ Typed </br>
