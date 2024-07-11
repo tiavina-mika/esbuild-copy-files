@@ -182,13 +182,12 @@ export type Pattern = {
    */
   to?: ArrayLike;
   /**
-   * Filter files or directory to copy
+   * Ignore files or directory to copy
    * it can be a string or an array of strings
    * it should be the name of the file or a pattern to match the file name from the source directory
    * example: `['package.json', '*.txt', 'myFolder']`
-   * @default ['*']: copy all files
    */
-  filter?: ArrayLike;
+  ignore?: ArrayLike;
   /**
    * Watch for changes in the source directory
    * when a file is added or changed, copy or change the file to the destination directory

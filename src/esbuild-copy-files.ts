@@ -2,9 +2,7 @@ import { Plugin } from "esbuild";
 import chokidar from "chokidar";
 
 import { Options } from "./types";
-import { copyFiles, copyFilesOnChange, ensureArray, getNewAddedFiles, getOriginalSourceFilenames } from "./utils";
-import fs from "fs-extra";
-import path from "path";
+import { copyFiles, copyFilesOnChange, ensureArray } from "./utils";
 
 /**
   * 
@@ -18,26 +16,14 @@ import path from "path";
 const copy = ({ patterns = [], stopWatching = false, watch = false }: Options) => ({
     name: 'esbuild-copy-files',
     setup: (build) => {
-        let originalSources: string[] = [];
-        // on build start
-        build.onStart(async () => {
-          // the original source files before the build
-          // this is used to compare with the current source files after the build
-          // to get the new added files
-          originalSources = await getOriginalSourceFilenames(patterns);
-        });
         // on build end
         build.onEnd(async () => {
           try {
             for (const pattern of patterns) {
-              const { from = [], to = [], filter = ['*'], watch: patternWatch } = pattern;
-              const fromArr = ensureArray(from);
-              const newAddFiles = await getNewAddedFiles(originalSources, fromArr);
-              console.log("🚀 ~ build.onEnd ~ newAddFiles:", { newAddFiles, originalSources, fromArr })
+              const { from = [], to = [], ignore = [], watch: patternWatch } = pattern;
 
-              for (const source of fromArr) {
-                const filterWithNewAddedFiles = [...filter, ...newAddFiles];
-                await copyFiles({ to, source, filter: filterWithNewAddedFiles });
+              for (const source of ensureArray(from)) {
+                await copyFiles({ to, source, ignore });
                 
                 // watch for changes in the source directory
                 if (watch && patternWatch) {
@@ -49,9 +35,9 @@ const copy = ({ patterns = [], stopWatching = false, watch = false }: Options) =
                   });
                   
                   // copy files when a file is added or changed
-                  watcher.on('change', copyFilesOnChange({ to, source, filter: filterWithNewAddedFiles }));
+                  watcher.on('change', copyFilesOnChange({ to, source, ignore }));
                   // copy files when a file is added
-                  watcher.on('add', copyFilesOnChange({ to, source, filter: filterWithNewAddedFiles }));
+                  watcher.on('add', copyFilesOnChange({ to, source, ignore }));
 
                   // stop watching for changes in the source directory
                   if (stopWatching) {

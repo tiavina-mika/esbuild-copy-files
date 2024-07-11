@@ -92,32 +92,32 @@ describe('esbuild-copy-files', () => {
       expect(files).toEqual(['test1.json', 'test2.json']);
     });
   
-    test('should copy one file', async () => {
+    test('should ignore one file to copy', async () => {
       await builder(
         {
           patterns: [
             {
               from: [`${sourceDir}/folder2`],
               to: [`${destDir}/folder2`],
-              filter: ['test3.json'],
+              ignore: ['test3.json'],
             }
           ]
         },
       );
   
       const files = fs.readdirSync(path.join(destDir, '/folder2'));
-      expect(files).toEqual(['test3.json']);
-      expect(files.includes('test4.txt')).toBe(false);
+      expect(files).toEqual(['test4.txt', 'test5.txt']);
+      expect(files.includes('test3.json')).toBe(false);
     });
 
-    test('should copy one folder', async () => {
+    test('should ignore one folder to copy', async () => {
       await builder(
         {
           patterns: [
             {
               from: [`${sourceDir}/folder3`],
               to: [`${destDir}/folder3`],
-              filter: ['subfolder3'],
+              ignore: ['test7.txt'],
             }
           ]
         },
@@ -135,14 +135,14 @@ describe('esbuild-copy-files', () => {
             {
               from: [`${sourceDir}/folder2`],
               to: [`${destDir}/folder2`],
-              filter: ['*.txt'], // filter all txt files
+              ignore: ['*.txt'], // ignore all txt files
             }
           ]
         },
       );
   
       const files = fs.readdirSync(path.join(destDir, '/folder2'));
-      expect(files).toEqual(['test4.txt', 'test5.txt']);
+      expect(files).toEqual(['test3.json']);
     });
   
     test('should copy all files to destination folders respectively', async () => {
@@ -294,14 +294,14 @@ describe('esbuild-copy-files', () => {
       expect(files.includes(newFile)).toBe(true);
     });
 
-    test('should copy new added file or folder even with filter in watch mode', async () => {
+    test('should copy new added file or folder even with ignore in watch mode', async () => {
       context = await watchedBuilder(
         {
           patterns: [
             {
               from: [`${sourceDir}/folder2`],
               to: [`${destDir}/folder2`],
-              filter: ['*.json'],
+              ignore: ['*.txt'],
               watch: true,
             }
           ],
@@ -320,93 +320,6 @@ describe('esbuild-copy-files', () => {
 
       // check if the new file is copied
       expect(files).toEqual([newFile, 'test3.json']);
-    });
-
-    test('should copy new added file or folder even with filter in watch mode', async () => {
-      context = await watchedBuilder(
-        {
-          patterns: [
-            {
-              from: [`${sourceDir}/folder2`],
-              to: [`${destDir}/folder2`],
-              filter: ['*.json'],
-              watch: true,
-            }
-          ],
-          stopWatching: true,
-          watch: true,
-        },
-      );
-
-      // 1. create a file in the source directory
-      await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
-  
-      await wait(1000);
-      // 3. list all files in the destination directory
-      const files = fs.readdirSync(path.join(destDir, '/folder2'));
-      await wait(1000);
-
-      // check if the new file is copied
-      expect(files).toEqual([newFile, 'test3.json']);
-    });
-
-    // test('should not copy new added file or folder not in filter', async () => {
-    //   context = await watchedBuilder(
-    //     {
-    //       patterns: [
-    //         {
-    //           from: [`${sourceDir}/folder2`],
-    //           to: [`${destDir}/folder2`],
-    //           filter: ['*.txt'],
-    //           watch: true,
-    //         }
-    //       ],
-    //       stopWatching: true,
-    //       watch: true,
-    //     },
-    //   );
-
-    //   // 1. create a file in the source directory
-    //   await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
-  
-    //   await wait(1000);
-    //   // 3. list all files in the destination directory
-    //   const files = fs.readdirSync(path.join(destDir, '/folder2'));
-    //   await wait(1000);
-
-    //   // check if the new file is copied
-    //   expect(files).toEqual(['test4.txt', 'test5.txt']);
-    // });
-
-    test('should copy new added file or folder even with filter', async () => {
-      context = await watchedBuilder(
-        {
-          patterns: [
-            {
-              from: [`${sourceDir}/folder2`],
-              to: [`${destDir}/folder2`],
-              // filter: ['test4.txt'],
-              filter: ['*.txt'],
-              watch: true,
-            }
-          ],
-          stopWatching: true,
-          watch: true,
-        },
-      );
-
-      // 1. create a file in the source directory
-      await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
-  
-      await wait(1000);
-      // 2. list all files in the destination directory
-      const files = fs.readdirSync(path.join(destDir, '/folder2'));
-      await wait(1000);
-
-      // check if the new file is copied
-      expect(files.length).toBe(3);
-      expect(files.includes('test3.json')).toBe(false);
-      expect(files.includes(newFile)).toBe(true);
     });
   });
 
