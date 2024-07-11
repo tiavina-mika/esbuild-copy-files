@@ -42,6 +42,7 @@ export const copyFiles = async ({ to = [], ignore = [], source }: CopyActionsInp
 
   // get the current working directory
   const currentRoot = process.cwd();
+  console.log("🚀 ~ copyFiles ~ currentRoot:", currentRoot, __dirname)
   const sourcePath = path.resolve(currentRoot, source);
 
   for (const dest of ensureArray(to)) {
