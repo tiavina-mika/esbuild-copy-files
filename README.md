@@ -77,19 +77,7 @@ dist/
 ```
 
 
-### Filter files to copy
-```tsx
-copy({
-  patterns: [
-    {
-      from: ['./src/folder1'],
-      to: ['./dist/folder1'],
-      // copy files with json and js extension
-      filter: ['*.json', '.*js']
-    }
-  ]
-})
-```
+### Ignore files to copy
 ```tsx
 copy({
   patterns: [
@@ -97,7 +85,7 @@ copy({
       from: ['./src/folder1'],
       to: ['./dist/folder1'],
       // copy only one folder
-      filter: ['subfolder1']
+      ignore: ['subfolder1', '*.txt']
     }
   ]
 })
