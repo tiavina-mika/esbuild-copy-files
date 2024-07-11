@@ -7,6 +7,7 @@ An <a href="https://esbuild.github.io/">esbuild</a> plugin to copy static files 
 <!-- Please keep comment here to allow auto update -->
 [![NPM Version](https://img.shields.io/npm/v/esbuild-copy-files?style=flat-square)](https://www.npmjs.com/package/esbuild-copy-files)
 [![Language](https://img.shields.io/badge/language-TypeScript-blue.svg?style=flat-square)](https://www.typescriptlang.org)
+[![Build](https://github.com/tiavina-mika/esbuild-copy-files/actions/workflows/release.yml/badge.svg)](https://github.com/tiavina-mika/esbuild-copy-files/actions)
 <!-- [END BADGES] -->
 
 ## Why?
