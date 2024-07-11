@@ -11,12 +11,14 @@ An <a href="https://esbuild.github.io/">esbuild</a> plugin to copy static files 
 <!-- [END BADGES] -->
 
 ## Why?
-<p>✔️ Easy to use </p>
-<p>✔️ Lightweight </p>
-<p>✔️ Typed </p>
-<p>✔️ Copy newly added files in watch mode </p>
-<p>✔️ Filter the files and folders you want to copy </p>
-<p>✔️ Run only once or only when directory or file changed </p>
+<p>
+✔️ Easy to use <br />
+✔️ Lightweight <br />
+✔️ Typed <br />
+✔️ Copy newly added files in watch mode <br />
+✔️ Filter the files and folders you want to copy <br />
+✔️ Run only once or only when directory or file changed
+</p>
 
 ## Installation
 
