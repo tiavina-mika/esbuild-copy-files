@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import anymatch from 'anymatch';
-import { ArrayLike } from './types';
+import { ArrayLike, Pattern } from './types';
 
 type CopyActionsInput = {
   to: ArrayLike<string>;
@@ -27,6 +27,56 @@ const forceCopy = async (sourcePath: string, destPath: string) => {
 };
 
 /**
+ * get the new added files in the source directory
+ * by comparing the original source directory (before build) with the current source directory (after build)
+ * @param originalSource 
+ * @param currentSource 
+ * @returns 
+ */
+export const getNewAddedFiles = async (originalSource: string[], currentSource: string[]): Promise<string[]> => {
+  const newFiles: string[] = [];
+  const currentRoot = process.cwd();
+
+  for (const source of currentSource) {
+    const sourcePath = path.resolve(currentRoot, source);
+    // list all files in the source directory
+    const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
+    for (const dest of dirEntries) {
+      // if the file is not in the original source directory, add it to the new files list
+      if (!originalSource.includes(dest.name)) {
+        newFiles.push(dest.name);
+      }
+    }
+  }
+
+  return newFiles;
+}
+
+/**
+ * get the original source filenames before the build
+ * @param patterns 
+ * @returns 
+ */
+export const getOriginalSourceFilenames = async (patterns: Pattern[] = []): Promise<string[]> => {
+  const originalSource: string[] = [];
+  const currentRoot = process.cwd();
+
+  for (const pattern of patterns) {
+    const { from = [] } = pattern;
+    for (const source of ensureArray(from)) {
+      // get the current working directory
+      const sourcePath = path.resolve(currentRoot, source);
+      // list all files in the source directory
+      const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
+      for (const dest of dirEntries) {
+        originalSource.push(dest.name);
+      }
+    }
+  }
+  return originalSource;
+}
+
+/**
  * 
  * copy files from the source directory to the destination directory
  * list of destination directories
@@ -44,7 +94,7 @@ export const copyFiles = async ({ to = [], filter = ['*'], source }: CopyActions
   const currentRoot = process.cwd();
   const sourcePath = path.resolve(currentRoot, source);
 
-  for (const dest of ensureArray(ensureArray(to))) {
+  for (const dest of ensureArray(to)) {
     const destPath = path.resolve(currentRoot, dest);
     // ensure the destination directory exists
     await fs.ensureDir(destPath);
@@ -54,12 +104,14 @@ export const copyFiles = async ({ to = [], filter = ['*'], source }: CopyActions
     // list all files in the source directory
     const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
 
+    const filterArray = ensureArray(filter);
+
     // if no filter is provided, copy all files
-    // if (!ensureArray(filter).length) return;
+    if (!filterArray.length || filterArray[0] === '*') return;
 
     // remove files that does not match the filter pattern in the destination directory
     for (const entry of dirEntries) {
-      const match = anymatch(ensureArray(filter), entry.name)
+      const match = anymatch(filterArray, entry.name)
       if (!match) {
         if (entry.isDirectory() || entry.isFile()) {
           await fs.remove(destPath + '/' + entry.name);
@@ -93,6 +145,7 @@ export const copyFilesOnChange = ({ to = [], source, filter }: CopyActionsInput)
 
     // copy the file if it matches the filter pattern
     const filterMatch = anymatch(ensureArray(filter), fileName);
+    console.log("🚀 ~ copyFilesOnChange ~ filterMatch:", filterMatch, fileName)
     if (filterMatch) {
       await copyFiles({ to, source, filter });
     }

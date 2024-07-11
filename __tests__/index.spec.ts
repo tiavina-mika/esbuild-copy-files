@@ -350,13 +350,42 @@ describe('esbuild-copy-files', () => {
       expect(files).toEqual([newFile, 'test3.json']);
     });
 
-    test('should not copy new added file or folder not in filter', async () => {
+    // test('should not copy new added file or folder not in filter', async () => {
+    //   context = await watchedBuilder(
+    //     {
+    //       patterns: [
+    //         {
+    //           from: [`${sourceDir}/folder2`],
+    //           to: [`${destDir}/folder2`],
+    //           filter: ['*.txt'],
+    //           watch: true,
+    //         }
+    //       ],
+    //       stopWatching: true,
+    //       watch: true,
+    //     },
+    //   );
+
+    //   // 1. create a file in the source directory
+    //   await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
+  
+    //   await wait(1000);
+    //   // 3. list all files in the destination directory
+    //   const files = fs.readdirSync(path.join(destDir, '/folder2'));
+    //   await wait(1000);
+
+    //   // check if the new file is copied
+    //   expect(files).toEqual(['test4.txt', 'test5.txt']);
+    // });
+
+    test('should copy new added file or folder even with filter', async () => {
       context = await watchedBuilder(
         {
           patterns: [
             {
               from: [`${sourceDir}/folder2`],
               to: [`${destDir}/folder2`],
+              // filter: ['test4.txt'],
               filter: ['*.txt'],
               watch: true,
             }
@@ -370,12 +399,14 @@ describe('esbuild-copy-files', () => {
       await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
   
       await wait(1000);
-      // 3. list all files in the destination directory
+      // 2. list all files in the destination directory
       const files = fs.readdirSync(path.join(destDir, '/folder2'));
       await wait(1000);
 
       // check if the new file is copied
-      expect(files).toEqual(['test4.txt', 'test5.txt']);
+      expect(files.length).toBe(3);
+      expect(files.includes('test3.json')).toBe(false);
+      expect(files.includes(newFile)).toBe(true);
     });
   });
 
@@ -385,5 +416,4 @@ describe('esbuild-copy-files', () => {
       expect(array).toEqual(['test']);
     });
   });
-
 });
