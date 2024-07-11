@@ -19,7 +19,7 @@ const copy = ({ patterns = [], stopWatching = false, watch = false }: Options) =
         build.onEnd(async () => {
           try {
             for (const pattern of patterns) {
-              const { from = [], to = [], filter = [], watch: patternWatch } = pattern;
+              const { from = [], to = [], filter = ['*'], watch: patternWatch } = pattern;
               for (const source of ensureArray(from)) {
                 await copyFiles({ to, source, filter });
                 

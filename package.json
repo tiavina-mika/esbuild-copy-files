@@ -10,7 +10,8 @@
     "esbuild-typescript-plugin",
     "copy-static-files",
     "esbuild-plugin",
-    "nodejs"
+    "nodejs",
+    "webpack"
   ],
   "homepage": "https://github.com/tiavina-mika/esbuild-copy-files",
   "bugs": {

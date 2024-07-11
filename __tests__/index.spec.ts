@@ -64,7 +64,8 @@ beforeEach(async () => {
 afterEach(async () => {
   await fs.remove(destDir);
   // remove the newly created file to the source directory if exists
-  await fs.remove(`${sourceDir}/folder1/subfolder1/${newFile}`)
+  await fs.remove(`${sourceDir}/folder1/subfolder1/${newFile}`);
+  await fs.remove(`${sourceDir}/folder2/${newFile}`);
 
   // should close the context after each test
   if (context) {
@@ -96,17 +97,17 @@ describe('esbuild-copy-files', () => {
         {
           patterns: [
             {
-              from: [`${sourceDir}/folder1/subfolder1`],
-              to: [`${destDir}/folder1/subfolder1`],
-              filter: ['test1.json'],
+              from: [`${sourceDir}/folder2`],
+              to: [`${destDir}/folder2`],
+              filter: ['test3.json'],
             }
           ]
         },
       );
   
-      const files = fs.readdirSync(path.join(destDir, '/folder1/subfolder1'));
-      expect(files).toEqual(['test1.json']);
-      expect(files.includes('test2.json')).toBe(false);
+      const files = fs.readdirSync(path.join(destDir, '/folder2'));
+      expect(files).toEqual(['test3.json']);
+      expect(files.includes('test4.txt')).toBe(false);
     });
 
     test('should copy one folder', async () => {
@@ -292,6 +293,90 @@ describe('esbuild-copy-files', () => {
       // check if the new file is copied
       expect(files.includes(newFile)).toBe(true);
     });
+
+    test('should copy new added file or folder even with filter in watch mode', async () => {
+      context = await watchedBuilder(
+        {
+          patterns: [
+            {
+              from: [`${sourceDir}/folder2`],
+              to: [`${destDir}/folder2`],
+              filter: ['*.json'],
+              watch: true,
+            }
+          ],
+          stopWatching: true,
+          watch: true,
+        },
+      );
+
+      // 1. create a file in the source directory
+      await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
+  
+      await wait(1000);
+      // 3. list all files in the destination directory
+      const files = fs.readdirSync(path.join(destDir, '/folder2'));
+      await wait(1000);
+
+      // check if the new file is copied
+      expect(files).toEqual([newFile, 'test3.json']);
+    });
+
+    test('should copy new added file or folder even with filter in watch mode', async () => {
+      context = await watchedBuilder(
+        {
+          patterns: [
+            {
+              from: [`${sourceDir}/folder2`],
+              to: [`${destDir}/folder2`],
+              filter: ['*.json'],
+              watch: true,
+            }
+          ],
+          stopWatching: true,
+          watch: true,
+        },
+      );
+
+      // 1. create a file in the source directory
+      await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
+  
+      await wait(1000);
+      // 3. list all files in the destination directory
+      const files = fs.readdirSync(path.join(destDir, '/folder2'));
+      await wait(1000);
+
+      // check if the new file is copied
+      expect(files).toEqual([newFile, 'test3.json']);
+    });
+
+    test('should not copy new added file or folder not in filter', async () => {
+      context = await watchedBuilder(
+        {
+          patterns: [
+            {
+              from: [`${sourceDir}/folder2`],
+              to: [`${destDir}/folder2`],
+              filter: ['*.txt'],
+              watch: true,
+            }
+          ],
+          stopWatching: true,
+          watch: true,
+        },
+      );
+
+      // 1. create a file in the source directory
+      await fs.ensureFile(path.join(sourceDir, '/folder2/', newFile));
+  
+      await wait(1000);
+      // 3. list all files in the destination directory
+      const files = fs.readdirSync(path.join(destDir, '/folder2'));
+      await wait(1000);
+
+      // check if the new file is copied
+      expect(files).toEqual(['test4.txt', 'test5.txt']);
+    });
   });
 
   describe('check utility functions', () => {
@@ -300,4 +385,5 @@ describe('esbuild-copy-files', () => {
       expect(array).toEqual(['test']);
     });
   });
+
 });

@@ -1,15 +1,13 @@
 # esbuild-copy-files
 
 <p align="left">
-An <a href="https://mui.com/material-ui/getting-started/overview/">esbuild</a> plugin to copy static files and folders from a source directory to destination directory</p>
+An <a href="https://esbuild.github.io/">esbuild</a> plugin to copy static files and folders from a source directory to destination directory</p>
 
-<p>✔️ Easy to use</p>
-<p>✔️ Lightweight</p>
-<p>✔️ Typed</p>
-
-<br />
-
-![Gif](https://github.com/tiavina-mika/esbuild-copy-files/blob/main/screenshots/example.gif)
+✔️ Easy to use </br>
+✔️ Lightweight </br>
+✔️ Typed </br>
+✔️ Can copy newly added files in watch mode </br>
+✔️ Can filter the files and folders you want to copy
 
 ## Installation
 
@@ -39,8 +37,8 @@ esbuild.build({
     copy({
       patterns: [
         {
-          from: ['./src/folder1/subfolder1'],
-          to: ['./dist/folder1/subfolder1'],
+          from: ['./src/folder1'],
+          to: ['./dist/folder1'],
         }
       ]
     })
@@ -49,7 +47,7 @@ esbuild.build({
 ```
 
 ```sh
-# the structure of the source files
+# source directories
 src/
 ├── folder1/
 │   ├── file1.png
@@ -57,7 +55,7 @@ src/
 │   │   └── file2.json
 │   │   └── file3.txt
 
-# the structure of the destination files
+# destination directories
 dist/
 ├── folder1/
 │   ├── file1.png
@@ -94,8 +92,7 @@ copy({
 })
 ```
 
-### Watch
-<p>Watch files in the source directory for changes or when a new files are created</p>
+### Watch mode
 <p>Watch files in the source directory for changes or when a new files are created</p>
 
 ```tsx
@@ -136,14 +133,14 @@ copy({
 ```
 
 ```sh
-# the structure of the source files
+# source directories
 src/
 ├── folder1/
 │   ├── file1.json
 ├── folder2/
 │   ├── file2.json
 
-# the structure of the destination files
+# destination directories
 dist/
 ├── folder3/
 │   ├── file1.json
@@ -155,7 +152,7 @@ dist/
 See [`here`](https://github.com/tiavina-mika/esbuild-copy-files-demo/tree/main/example) for more examples that use `esbuild-copy-files`.
 
 ## Types
-```tsx
+```ts
 export type ArrayLike<T = string> = T | T[];
 
 export type Pattern = {
@@ -178,6 +175,7 @@ export type Pattern = {
    * it can be a string or an array of strings
    * it should be the name of the file or a pattern to match the file name from the source directory
    * example: `['package.json', '*.txt', 'myFolder']`
+   * @default ['*']: copy all files
    */
   filter?: ArrayLike;
   /**
@@ -201,6 +199,7 @@ export type Options = {
   /**
    * Watch for changes in the source directory
    * When setting to true, make sure using esbuild's watch mode (ctx.watch())
+   * @see https://esbuild.github.io/api/#watch
    * @default false
    */
   watch?: boolean;

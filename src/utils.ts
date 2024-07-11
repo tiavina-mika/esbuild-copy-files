@@ -37,7 +37,7 @@ const forceCopy = async (sourcePath: string, destPath: string) => {
  * @param filter 
  * @returns 
  */
-export const copyFiles = async ({ to = [], filter = [], source }: CopyActionsInput): Promise<void | undefined> => {
+export const copyFiles = async ({ to = [], filter = ['*'], source }: CopyActionsInput): Promise<void | undefined> => {
   if (!source) return;
 
   // get the current working directory
@@ -55,7 +55,7 @@ export const copyFiles = async ({ to = [], filter = [], source }: CopyActionsInp
     const dirEntries = await fs.readdir(sourcePath, { withFileTypes: true });
 
     // if no filter is provided, copy all files
-    if (!ensureArray(filter).length) return;
+    // if (!ensureArray(filter).length) return;
 
     // remove files that does not match the filter pattern in the destination directory
     for (const entry of dirEntries) {

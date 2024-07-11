@@ -20,6 +20,7 @@ export type Pattern = {
    * it can be a string or an array of strings
    * it should be the name of the file or a pattern to match the file name from the source directory
    * example: `['test1.json', '*.txt']`
+   * @default ['*']: copy all files
    */
   filter?: ArrayLike;
   /**
