@@ -145,7 +145,7 @@ export const copyFilesOnChange = ({ to = [], source, filter }: CopyActionsInput)
 
     // copy the file if it matches the filter pattern
     const filterMatch = anymatch(ensureArray(filter), fileName);
-    console.log("🚀 ~ copyFilesOnChange ~ filterMatch:", filterMatch, fileName)
+    console.log("🚀 ~ copyFilesOnChange ~ filterMatch:", filterMatch, fileName, filter)
     if (filterMatch) {
       await copyFiles({ to, source, filter });
     }
