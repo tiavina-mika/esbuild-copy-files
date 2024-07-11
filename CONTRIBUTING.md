@@ -6,10 +6,9 @@ _Pull requests, bug reports, and all other forms of contribution are welcomed an
 
 ### GitHub issues
 
-If you encounter a problem with this library or if you have a new feature you'd like to see in this project, please create [a new issue](https://github.com/tiavina-mika/build-copy-files/issues/new/choose).
+If you encounter a problem with this library or if you have a new feature you'd like to see in this project, please create [a new issue](https://github.com/tiavina-mika/esbuild-copy-files/issues/new/choose).
 
 ### GitHub pull requests
-
 Please leverage the repository's own tools to make sure the code is aligned with our standards. If you're using VSCode, it's easiest to use the recommended extensions (`.vscode/extensions.json`) to get integrated linting and autoformatting.
 
 It's recommended to run all check commands before submitting the PR (`type:check`, `format:check`, `lint:check`, `spell:check`, `yarn lint` and  `yarn test:coverage`).

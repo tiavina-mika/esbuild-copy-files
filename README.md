@@ -149,7 +149,7 @@ dist/
 
 ```
 
-See [`here`](https://github.com/tiavina-mika/esbuild-copy-files-demo/tree/main/example) for more examples that use `esbuild-copy-files`.
+See [`here`](https://github.com/tiavina-mika/esbuild-copy-files-demo/tree/main) for more examples that use `esbuild-copy-files`.
 
 ## Types
 ```ts
