@@ -40,6 +40,9 @@ yarn add --dev esbuild-copy-files
 const esbuild = require('esbuild');
 const { copy } = require("esbuild-copy-files");
 
+const sourceDir = path.resolve(__dirname, './src');
+const destDir = path.resolve(__dirname, './dist');
+
 esbuild.build({
   entryPoints: ["src/index.ts"],
   bundle: true,
@@ -48,8 +51,8 @@ esbuild.build({
     copy({
       patterns: [
         {
-          from: ['./src/folder1'],
-          to: ['./dist/folder1'],
+          from: [`${sourceDir}/folder1`],
+          to: [`${destDir}/folder1`],
         }
       ]
     })
@@ -82,8 +85,8 @@ dist/
 copy({
   patterns: [
     {
-      from: ['./src/folder1'],
-      to: ['./dist/folder1'],
+      from: [`${sourceDir}/folder1`],
+      to: [`${destDir}/folder1`],
       // copy only one folder
       ignore: ['subfolder1', '*.txt']
     }
@@ -100,32 +103,16 @@ copy({
   watch: true,
   patterns: [
     {
-      from: ['./src/folder1', './src/folder2'],
-      to: ['./dist/folder1'],
+      from: [`${sourceDir}/folder1`, `${sourceDir}/folder2`],
+      to: [`${destDir}/folder1`],
       // watch change on src/folder1 and src/folder2
       watch: true
     },
     {
-      from: ['./src/folder3'],
-      to: ['./dist/folder3'],
+      from: [`${sourceDir}/folder3`],
+      to: [`${destDir}/folder3`],
       // do not watch change on ./src/folder3
       watch: false
-    }
-  ]
-})
-```
-
-### Multiple copy
-```tsx
-copy({
-  patterns: [
-    {
-      from: ['./src/folder1'],
-      to: ['./dist/folder3']
-    },
-    {
-      from: ['./src/folder2'],
-      to: ['./dist/folder4']
     }
   ]
 })

@@ -46,8 +46,13 @@ const copy = ({ patterns = [], stopWatching = false, watch = false }: Options) =
                 }
               }
             }
-          } catch (e) {
-              console.error('Failed to copy file:', e);
+          } catch (error) {
+            // It usually happens when the folder is opened in the terminal, after stopping the terminal i was able to delete the folder.
+            // see: https://stackoverflow.com/questions/55212864/error-ebusy-resource-busy-or-locked-rmdir
+            if ((error as any).code === 'EBUSY') {
+              return;
+            }
+            console.error(error);
           }
         });
     },

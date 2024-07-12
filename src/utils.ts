@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import anymatch from 'anymatch';
-import { ArrayLike, Pattern } from './types';
+import { ArrayLike } from './types';
 
 type CopyActionsInput = {
   to: ArrayLike<string>;
@@ -16,7 +16,7 @@ type CopyActionsInput = {
  */
 export const ensureArray = <T>(value: ArrayLike<T>): T[] => Array.isArray(value) ? value : [value];
 
-const forceCopy = async (sourcePath: string, destPath: string) => {
+const forceCopy = async (sourcePath: string, destPath: string): Promise<void | boolean> => {
   try {
     await fs.copy(sourcePath, destPath);
   } catch (error) {
@@ -42,7 +42,6 @@ export const copyFiles = async ({ to = [], ignore = [], source }: CopyActionsInp
 
   // get the current working directory
   const currentRoot = process.cwd();
-  console.log("🚀 ~ copyFiles ~ currentRoot:", currentRoot, __dirname)
   const sourcePath = path.resolve(currentRoot, source);
 
   for (const dest of ensureArray(to)) {
@@ -84,22 +83,18 @@ export const copyFiles = async ({ to = [], ignore = [], source }: CopyActionsInp
  * @param ignore 
  * @returns 
  */
-export const copyFilesOnChange = ({ to = [], source, ignore }: CopyActionsInput) => async (watchedFilePath: string): Promise<void | undefined> => {
-  try {
-    const fileName = path.basename(watchedFilePath);
+export const copyFilesOnChange = ({ to = [], source, ignore }: CopyActionsInput) => async (watchedFilePath: string): Promise<void | undefined | boolean> => {
+  const fileName = path.basename(watchedFilePath);
 
-    // if no ignore is provided, copy all files
-    if (!ensureArray(ignore).length) {
-      await copyFiles({ to, source, ignore });
-      return;
-    };
+  // if no ignore is provided, copy all files
+  if (!ensureArray(ignore).length) {
+    await copyFiles({ to, source, ignore });
+    return;
+  };
 
-    // copy the file if it matches the ignore pattern
-    const ignoreMatch = anymatch(ensureArray(ignore), fileName);
-    if (!ignoreMatch) {
-      await copyFiles({ to, source, ignore });
-    }
-  } catch (e) {
-    console.error('copyFilesOnChange to copy file error:', e);
+  // copy the file if it matches the ignore pattern
+  const ignoreMatch = anymatch(ensureArray(ignore), fileName);
+  if (!ignoreMatch) {
+    await copyFiles({ to, source, ignore });
   }
 }
