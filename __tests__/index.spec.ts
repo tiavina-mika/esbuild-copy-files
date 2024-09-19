@@ -51,7 +51,7 @@ const watchedBuilder = async (
 ): Promise<BuildContext> => {
     const ctx = await esbuild.context({
       ...getBuilderOptions(esbuildOptions),
-      plugins: [copy({ ...options, stopWatching: true } as Options)],
+      plugins: [copy({ ...options, watch: true, stopWatching: true } as Options)],
     });
     await ctx.watch();
     return ctx;
@@ -226,8 +226,6 @@ describe('esbuild-copy-files', () => {
               watch: true,
             }
           ],
-          stopWatching: true,
-          watch: true,
         },
       );
 
@@ -258,8 +256,6 @@ describe('esbuild-copy-files', () => {
               watch: true,
             }
           ],
-          stopWatching: true,
-          watch: true,
         },
       );
 
@@ -305,8 +301,6 @@ describe('esbuild-copy-files', () => {
               watch: true,
             }
           ],
-          stopWatching: true,
-          watch: true,
         },
       );
 
