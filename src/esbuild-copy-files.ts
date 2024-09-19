@@ -40,9 +40,9 @@ const copy = ({ patterns = [], stopWatching = false, watch = false }: Options) =
                   watcher.on('add', copyFilesOnChange({ to, source, ignore }));
 
                   // stop watching for changes in the source directory
-                  if (stopWatching) {
+                  // if (stopWatching) {
                     await watcher.close();
-                  }
+                  // }
                 }
               }
             }
